@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block main %}
+{% for coffee in coffies %}
+<div class="coffee">
+    {{ coffee.name }} - {{ coffee.cost }}
+</div>
+{% endfor %}
+{% endblock main %}
