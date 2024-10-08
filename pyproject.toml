@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "learning-practice-django"
+version = "1.0.0"
+description = "Project for colleage learning practice on django for coffe shop \"Aogiri\""
+authors = ["gh0sthck"]
+license = "GNU"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+Django = "^5.1.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
