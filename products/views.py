@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from django.views.generic.list import ListView
 
-# Create your views here.
+from products.models import Coffee
+
+
+class AllCoffee(ListView):
+    model = Coffee
+    template_name = "products_all.html"
