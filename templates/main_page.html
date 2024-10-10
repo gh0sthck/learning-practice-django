@@ -5,6 +5,8 @@
 {% endblock %}
 
 {% block main %}
+  {{ ord }}
+
   <h1>Сделайте свой заказ!</h1>
 
   <h2>Кофе</h2>
@@ -13,7 +15,10 @@
       <div class="coffee">
         <p>{{ coffee.name }}</p>
         <p>{{ coffee.cost }}</p>
-        <input type="submit" value="Купить" />
+        <form action={% url 'update_order' coffee.pk %} method="post">
+          {% csrf_token %}
+          <input type="submit" value="Купить" />
+        </form>
       </div>
     {% endfor %}
     <a></a>

@@ -5,7 +5,7 @@ from orders.models import Mixin, Order
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ["id", "price", "is_ready"]
+    list_display = ["id", "is_ready"]
 
 
 @admin.register(Mixin)
