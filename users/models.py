@@ -32,10 +32,10 @@ class CoffeeUser(AbstractUser):
     )
 
     def __str__(self):
-        return self.name
+        return self.username
 
     def __repr__(self):
-        return f"<CoffeeUser: {self.name}>"
+        return f"<CoffeeUser: {self.username}>"
 
     class Meta:
         ordering = ["name"]

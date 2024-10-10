@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Главная
+{% endblock %}
+
+{% block main %}
+  <h1>Сделайте свой заказ!</h1>
+
+  <h2>Кофе</h2>
+  {% if coffies %}
+    {% for coffee in coffies %}
+      <div class="coffee">
+        <p>{{ coffee.name }}</p>
+        <p>{{ coffee.cost }}</p>
+        <input type="submit" value="Купить" />
+      </div>
+    {% endfor %}
+    <a></a>
+  {% else %}
+    <h3>Кофе не найдено</h3>
+  {% endif %}
+
+  <h2>Выпечка</h2>
+  {% if foods %}
+    {% for food in foods %}
+      <div class="food">{{ food.name }}</div>
+    {% endfor %}
+  {% else %}
+    <h3>Выпечки не найдно</h3>
+  {% endif %}
+{% endblock %}

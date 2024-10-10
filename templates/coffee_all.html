@@ -1,9 +1,18 @@
 {% extends "base.html" %}
 
+{% block title %}
+Кофе
+{% endblock title %}
+
 {% block main %}
-{% for coffee in coffies %}
-<div class="coffee">
-    {{ coffee.name }} - {{ coffee.cost }}
-</div>
-{% endfor %}
+    {% if coffies %}
+    {% for coffee in coffies %}
+        <div class="coffee">
+            {{ coffee.name }} - {{ coffee.cost }}
+        </div>
+    {% endfor %}
+    {% else %}
+        <h1>Coffee not found</h1>
+    {% endif %}
+    
 {% endblock main %}

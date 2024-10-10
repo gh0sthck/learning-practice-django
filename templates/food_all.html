@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+Выпечка
+{% endblock title %}
+
+{% block main %}
+    {% if foods %}
+        {% for food in foods %}
+        <div class="food">
+            {{ food.name }}
+        </div>
+        {% endfor %}
+    {% else %}
+        <h1>Food not found</h1>
+    {% endif %}
+{% endblock main %}

@@ -9,7 +9,7 @@ class Order(models.Model):
         Coffee, verbose_name="id кофе", on_delete=models.DO_NOTHING
     )
     food_id = models.ForeignKey(
-        Food, verbose_name="id еды", on_delete=models.DO_NOTHING
+        Food, verbose_name="id еды", on_delete=models.DO_NOTHING, null=True, blank=True
     )
     price = models.PositiveIntegerField(verbose_name="Общая цена")
     bonuses = models.DecimalField(
