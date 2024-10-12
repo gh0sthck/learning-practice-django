@@ -13,6 +13,7 @@
             <ul class="nav__menu">
                 <li><a href={% url 'main' %}>Главная</a></li>
                 {% if user.is_authenticated %}
+                <li><a href={% url 'profile' user.pk %}>{{ user.username }}</a></li>
                 <form action={% url 'logout' %} method="post">
                     {% csrf_token %}
                     <li><input type="submit" value="Выйти"</li>
@@ -22,6 +23,7 @@
                     {% csrf_token %}
                     <li><input type="submit" value="Войти"></li>
                 </form>
+                <li><a href={% url 'register' %}>Регистрация</a></li>
                 {% endif %}
             </ul>
         </nav>
