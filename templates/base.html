@@ -8,8 +8,27 @@
 </head>
 
 <body>
+    <header class="header">
+        <nav class="nav">
+            <ul class="nav__menu">
+                <li><a href={% url 'main' %}>Главная</a></li>
+                {% if user.is_authenticated %}
+                <form action={% url 'logout' %} method="post">
+                    {% csrf_token %}
+                    <li><input type="submit" value="Выйти"</li>
+                </form>
+                {% else %}
+                <form action={% url 'login' %} method="post">
+                    {% csrf_token %}
+                    <li><input type="submit" value="Войти"></li>
+                </form>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
     {% block main %}
-    
+
     {% endblock main %}
 </body>
 

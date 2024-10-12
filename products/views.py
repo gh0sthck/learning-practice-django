@@ -22,13 +22,15 @@ class MainPage(View):
     def get(self, request):
         coffies = Coffee.objects.all()[:6]
         foods = Food.objects.all()[:6]
-        order = Order.objects.all()
-        user_order = Order.objects.get(user=request.user)
+        user_order = (
+            Order.objects.get(user=request.user)
+            if request.user.is_authenticated
+            else None
+        )
 
         ctx = {
             "foods": foods,
             "coffies": coffies,
-            "ord": order,
             "current_order": user_order,
         }
         return render(request, template_name="main_page.html", context=ctx)
