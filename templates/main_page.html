@@ -12,24 +12,35 @@
   <h2>Кофе</h2>
   {% if coffies %}
     {% for coffee in coffies %}
-      <div class="coffee">
+      <div class="coffee menu">
         <p>{{ coffee.name }}</p>
-        <p>{{ coffee.cost }}</p>
-        <form action={% url 'update_order' coffee.pk %} method="post">
-          {% csrf_token %}
-          <input type="submit" value="Купить" />
-        </form>
+        <p>{{ coffee.cost }}Р</p>
+        {% if user.is_authenticated and current_order.coffee != coffee %}
+          <form action={% url 'update_order_coffee' coffee.pk %} method="post">
+            {% csrf_token %}
+            <input type="submit" value="Добавить в заказ" />
+          </form>
+        {% endif %}
       </div>
     {% endfor %}
-    <a></a>
   {% else %}
     <h3>Кофе не найдено</h3>
   {% endif %}
 
   <h2>Выпечка</h2>
+  <p>Помните, вы должны заказать кофе, чтобы купить выпечку!</p>
   {% if foods %}
     {% for food in foods %}
-      <div class="food">{{ food.name }}</div>
+      <div class="food menu">
+        <p>{{ food.name }}</p>
+        <p>{{ food.cost }}Р</p>
+        {% if user.is_authenticated and current_order.food != food %}
+        <form action={% url 'update_order_food' food.pk %} method="post">
+          {% csrf_token %}
+          <input type="submit" value="Добавить в заказ" />
+        </form>
+      {% endif %}
+      </div>
     {% endfor %}
   {% else %}
     <h3>Выпечки не найдно</h3>

@@ -1,23 +1,31 @@
 from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.views import View
-from django.contrib.auth.decorators import login_required
 
 from orders.models import Order
 from products.models import Coffee, Food
 
 
-@login_required
-class UpdateOrder(View):
-    def post(self, request: HttpRequest, id: int):
+class UpdateOrderCoffee(View):
+    def post(self, request: HttpRequest, coffee_id: int):
         user = request.user
-        order = Order.objects.filter(user_id=user.id)
-        coffee = Coffee.objects.get(id=id)
-        print(order)
+        order = Order.objects.get(user=user.id)
+        coffee = Coffee.objects.get(id=coffee_id)
         if order:
-            order[0].coffe_id = coffee
-            order[0].save()
+            order.coffee = coffee
+            order.save()
         else:
-            new_order = Order.objects.create(coffe_id=coffee, user_id=user)
+            new_order = Order.objects.create(coffee=coffee, user=user)
             new_order.save()
+        return redirect("main")
+
+
+class UpdateOrderFood(View):
+    def post(self, request: HttpRequest, food_id: int):
+        user = request.user
+        order = Order.objects.get(user=user.id)
+        food = Food.objects.get(id=food_id)
+        if order:
+            order.food = food
+            order.save()
         return redirect("main")
