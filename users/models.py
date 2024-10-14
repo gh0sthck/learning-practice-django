@@ -4,6 +4,14 @@ from django.contrib.auth.models import AbstractUser
 
 class UserTypes(models.Model):
     name = models.CharField(max_length=30, verbose_name="Имя", null=False)
+    is_personal = models.BooleanField(verbose_name="Персонал", default=False)
+    is_barista = models.BooleanField(verbose_name="Бариста", default=False)
+
+    def __repr__(self) -> str:
+        return f"<UserTypes: {self.name}>"
+
+    def __str__(self) -> str:
+        return self.name
 
     class Meta:
         ordering = ["name"]
