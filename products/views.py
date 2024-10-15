@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.views import View
 from django.views.generic.list import ListView
 
@@ -22,11 +22,13 @@ class MainPage(View):
     def get(self, request):
         coffies = Coffee.objects.all()[:6]
         foods = Food.objects.all()[:6]
-        user_order = (
-            Order.objects.get(user=request.user)
-            if request.user.is_authenticated
-            else None
-        )
+        user_order = None
+
+        if request.user.is_authenticated:
+            try:
+                user_order = Order.objects.get(user=request.user)
+            except Order.DoesNotExist:
+                user_order = None
 
         ctx = {
             "foods": foods,
