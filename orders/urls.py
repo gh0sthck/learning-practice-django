@@ -1,6 +1,12 @@
 from django.urls import path
 
-from orders.views import AddOrderCoffee, AddOrderFood, DelOrderCoffee, DelOrderFood
+from orders.views import (
+    AddOrderCoffee,
+    AddOrderFood,
+    CurrentOrder,
+    DelOrderCoffee,
+    DelOrderFood,
+)
 
 
 urlpatterns = [
@@ -24,4 +30,5 @@ urlpatterns = [
         DelOrderFood.as_view(),
         name="del_order_food",
     ),
+    path("current", CurrentOrder.as_view(), name="current_order"),
 ]

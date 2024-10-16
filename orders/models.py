@@ -44,9 +44,9 @@ class Order(models.Model):
         return self.is_paid
 
     def get_total_price(self):
-        if self.food:
-            return self.coffee.cost + self.food.cost
-        return self.coffee.cost
+        return (
+            self.coffee.cost if self.coffee else 0 + self.food.cost if self.food else 0
+        )
 
     class Meta:
         ordering = ["id"]

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}
+Текущий заказ
+{% endblock title %}
+
+{% block main %}
+    {% if not user.is_authenticated %}
+        <h1 class="title">Вы не вошли в аккаунт</h1>
+    {% else %}
+        <h1 class="title">Ваш текущий заказ</h1>
+        <p>
+            Кофе: {% if order.coffee %} {{ order.coffee.name }} - {{ order.coffee.cost }} {% else %} Кофе не выбран {% endif %}
+            {% if order.coffee %}
+            <p>Что добавить?</p>
+            <form method="post">
+                {% csrf_token %}
+                {{ mixin_form.as_p }}
+                <input type="submit" value="Подтвердить" />
+            </form>
+            {% endif %}
+        </p>
+        <p>
+            Выпечка: {% if order.food %} {{ order.food.name }} - {{ order.food.cost }} {% else %} Выпечка не выбрана {% endif %}
+        </p>
+        
+        <h2 class="sub_title">Подробнее</h2>
+        <p>Оплата заказа: {% if order.is_paid %} произведена {% else %} ждет оплаты {% endif %}</p>
+        <p>Готовность: {% if order.is_ready %} готов, можете забирать {% else %} готовится... {% endif %}</p>
+        <p>Использован бонус: {% if order.is_bonus_used %} да {% else %} нет {% endif %}</p>
+        <p>Сумма к оплате: {{ order.get_total_price }}</p>
+    {% endif %}
+{% endblock main %}
