@@ -5,7 +5,9 @@ from users.models import CoffeeUser
 
 
 class Order(models.Model):
-    coffee = models.ForeignKey(Coffee, verbose_name="Кофе", on_delete=models.DO_NOTHING)
+    coffee = models.ForeignKey(
+        Coffee, verbose_name="Кофе", on_delete=models.DO_NOTHING, null=True, blank=True
+    )
     food = models.ForeignKey(
         Food, verbose_name="Еда", on_delete=models.DO_NOTHING, null=True, blank=True
     )

@@ -17,9 +17,7 @@ class RegisterView(FormView):
 
     def form_valid(self, form: forms.Form):
         saved_user = form.save(commit=False)
-        print("SAVED", saved_user, type(saved_user))
         saved_user.set_password(saved_user.password)
-        print("PASSWD", saved_user.password)
         saved_user.save()
         user = authenticate(
             username=saved_user.username,

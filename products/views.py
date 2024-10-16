@@ -1,8 +1,9 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from django.views import View
 from django.views.generic.list import ListView
 
 from orders.models import Order
+from orders.utils import get_order
 from products.models import Coffee, Food
 
 
@@ -25,10 +26,7 @@ class MainPage(View):
         user_order = None
 
         if request.user.is_authenticated:
-            try:
-                user_order = Order.objects.get(user=request.user)
-            except Order.DoesNotExist:
-                user_order = None
+            user_order = get_order(user=request.user)
 
         ctx = {
             "foods": foods,
