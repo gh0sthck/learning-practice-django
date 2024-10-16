@@ -1,37 +1,49 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="ru">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href={% static "css/main.css" %}>
     <title>{% block title %}{% endblock title %}</title>
 </head>
 
 <body>
     <header class="header">
-        <nav class="nav">
-            <ul class="nav__menu">
-                <li><a href={% url 'main' %}>Главная</a></li>
-                {% if user.is_authenticated %}
-                <li><a href={% url 'profile' user.pk %}>{{ user.username }}</a></li>
-                <form action={% url 'logout' %} method="post">
-                    {% csrf_token %}
-                    <li><input type="submit" value="Выйти"</li>
-                </form>
-                {% else %}
-                <form action={% url 'login' %} method="post">
-                    {% csrf_token %}
-                    <li><input type="submit" value="Войти"></li>
-                </form>
-                <li><a href={% url 'register' %}>Регистрация</a></li>
-                {% endif %}
-            </ul>
-        </nav>
+        <div class="container">
+            <nav class="nav">
+                <ul class="nav__menu">
+                    <li><a href={% url 'main' %}>Главная</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href={% url 'profile' user.pk %}>{{ user.username }}</a></li>
+                    <li>
+                        <form action={% url 'logout' %} method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Выйти">
+                        </form>
+                    </li>
+                    {% else %}
+                    <li>
+                        <form action={% url 'login' %} method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Войти">
+                        </form>
+                    </li>
+                    <li><a href={% url 'register' %}>Регистрация</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
     </header>
+    <main class="main">
+        <div class="container">
+            {% block main %}
 
-    {% block main %}
+            {% endblock main %}
+        </div>
+    </main>
 
-    {% endblock main %}
 </body>
 
 </html>
