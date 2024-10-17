@@ -10,9 +10,10 @@
 
 <div class="products">
   {% if coffies %}
-  {% for coffee in coffies %}
+  {% for coffee in cof_page %}
   <div class="product">
     <h3>{{ coffee.name }}</h3>
+    <span style="font-size:13px;">{{ coffee.volume }}л.</span>
     <p>{{ coffee.cost }}₽</p>
     {% if user.is_authenticated %}
     {% if current_order.coffee != coffee or not current_order.coffee %}
@@ -29,17 +30,19 @@
     {% endif %}
   </div>
   {% endfor %}
+  
   {% else %}
   <h3>Кофе не найдено</h3>
   {% endif %}
-
 </div>
+
+{% include "pagination.html" with pag_page=cof_page %}
 
 <h2 class="sub_title">Выпечка</h2>
 <div class="products">
 
   {% if foods %}
-  {% for food in foods %}
+  {% for food in fd_page %}
   <div class="product">
     <h3>{{ food.name }}</h3>
     <p>{{ food.cost }}₽</p>
@@ -62,4 +65,6 @@
   <h3>Выпечки не найдно</h3>
   {% endif %}
 </div>
+
+{% include "pagination.html" with pag_page=fd_page %}
 {% endblock %}
