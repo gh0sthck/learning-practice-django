@@ -1,6 +1,9 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from orders.models import Order
 from orders.utils import get_order
@@ -34,3 +37,17 @@ class MainPage(View):
             "current_order": user_order,
         }
         return render(request, template_name="main_page.html", context=ctx)
+
+
+class AddCoffee(CreateView):
+    model = Coffee
+    fields = ["name", "cost", "volume"]
+    template_name = "product_add.html"
+    success_url = reverse_lazy("main")
+
+
+class AddFood(CreateView):
+    model = Food
+    fields = ["name", "cost"]
+    template_name = "product_add.html"
+    success_url = reverse_lazy("main")
