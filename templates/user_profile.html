@@ -5,5 +5,16 @@
 {% endblock title %}
 
 {% block main %}
-<h1>Профиль {{ user.username }}</h1>
+<div class="profile">
+    <h1 class="title">{{ user.username }}</h1>
+    <p>Количество бонусов: {{ user.bonus }}</p>
+    <p>
+        Тип: {% if user.is_superuser %}Администратор {% elif user.is_barista %} Бариста {% else %} Клиент {% endif %}
+    </p>
+    {% if user.is_superuser %}
+    <h3 class="sub_title">Панель управления</h3>
+    <p>- <a href={% url 'add_coffee' %}>Добавить кофе</a></p>
+    <p>- <a href={% url 'add_food' %}>Добавить выпечку</a></p>
+    {% endif %}
+</div>
 {% endblock main %}
