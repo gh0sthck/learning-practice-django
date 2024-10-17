@@ -1,6 +1,6 @@
 from typing import Optional
 
-from orders.models import Order
+from orders.models import Mixin, Order
 from users.models import CoffeeUser
 
 
@@ -12,3 +12,13 @@ def get_order(user: CoffeeUser) -> Optional[Order]:
         return order
     finally:
         return order
+
+
+def get_mixin(order: Order) -> Optional[Mixin]:
+    mixin = None
+    try:
+        mixin = Mixin.objects.get(order=order)
+    except Mixin.DoesNotExist:
+        return mixin
+    finally:
+        return mixin

@@ -44,8 +44,8 @@ class Order(models.Model):
         return self.is_paid
 
     def get_total_price(self):
-        return (
-            self.coffee.cost if self.coffee else 0 + self.food.cost if self.food else 0
+        return (self.coffee.cost if self.coffee else 0) + (
+            self.food.cost if self.food else 0
         )
 
     class Meta:
@@ -67,6 +67,19 @@ class Mixin(models.Model):
 
     def __repr__(self) -> str:
         return f"<Mixin: {self.id}-{self.order}>"
+
+    @property
+    def as_dict(self) -> dict:
+        return {
+            "milk": self.milk,
+            "syrup": self.syrup,
+            "cinnamon": self.cinnamon,
+        }
+
+    def set_mixin(self, cinnamon=None, milk=None, syrup=None) -> None:
+        self.cinnamon = cinnamon
+        self.milk = milk
+        self.syrup = syrup
 
     class Meta:
         ordering = ["id"]
