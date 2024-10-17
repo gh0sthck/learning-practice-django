@@ -16,7 +16,7 @@
             <form method="post">
                 {% csrf_token %}
                 {{ mixin_form.as_p }}
-                <input type="submit" value="Подтвердить" />
+                <input type="submit" class="buy_button" value="Подтвердить" />
             </form>
             {% endif %}
         </p>

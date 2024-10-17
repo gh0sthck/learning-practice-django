@@ -16,11 +16,11 @@
                 <ul class="nav__menu">
                     <li><a href={% url 'main' %}>Главная</a></li>
                     {% if user.is_authenticated %}
-                    <li><a href={% url 'profile' user.pk %}>{{ user.username }}</a></li>
+                    <li><a href={% url 'profile' user.pk %}>{{ user.username }}: {{ user.balance }}₽</a></li>
                     <li>
                         <form action={% url 'logout' %} method="post">
                             {% csrf_token %}
-                            <input type="submit" value="Выйти">
+                            <input class="del_button" type="submit" value="Выйти">
                         </form>
                     </li>
                     <li><a href={% url 'current_order' %}>Заказ</a></li>
@@ -28,7 +28,7 @@
                     <li>
                         <form action={% url 'login' %} method="post">
                             {% csrf_token %}
-                            <input type="submit" value="Войти">
+                            <input class="buy_button" type="submit" value="Войти">
                         </form>
                     </li>
                     <li><a href={% url 'register' %}>Регистрация</a></li>

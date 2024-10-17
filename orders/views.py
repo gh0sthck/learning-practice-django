@@ -15,6 +15,7 @@ class CurrentOrder(View):
         user = request.user
         order = None
         mixin = None
+        form = None
 
         if request.user.is_authenticated:
             order = get_order(user=user)
@@ -25,8 +26,9 @@ class CurrentOrder(View):
             if not mixin:
                 mixin = Mixin.objects.create(order=order)
                 mixin.save()
-
-        form = self.mixin_form(mixin.as_dict)
+            form = self.mixin_form(mixin.as_dict)
+        else:
+            form = self.mixin_form()
 
         return render(
             request,
