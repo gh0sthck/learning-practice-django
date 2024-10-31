@@ -14,7 +14,7 @@
         <div class="container">
             <nav class="nav">
                 <ul class="nav__menu">
-                    <li><a href={% url 'main' %}>Главная</a></li>
+                    <li><a href={% url 'main' %}>Aogiri</a></li>
                     {% if user.is_authenticated %}
                     <li><a href={% url 'profile' user.pk %}>{{ user.username }}: {{ user.balance }}₽</a></li>
                     <li>

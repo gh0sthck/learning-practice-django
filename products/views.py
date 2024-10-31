@@ -15,7 +15,6 @@ class AllCoffee(ListView):
     template_name = "coffee_all.html"
     context_object_name = "coffies"
 
-
 class AllFood(ListView):
     model = Food
     template_name = "food_all.html"
@@ -26,6 +25,16 @@ class MainPage(View):
     def get(self, request):
         coffies = Coffee.objects.all()
         foods = Food.objects.all()
+
+        coffies_vols: dict[Coffee, list[int]] = {}
+        for coffee in coffies:
+            if coffee.name not in coffies_vols:
+               coffies_vols[coffee.name] = [coffee.volume]
+            else:
+                coffies_vols[coffee.name].append(coffee.volume) 
+
+        coffies = [Coffee.objects.filter(name=cof)[0] for cof in coffies_vols]
+
         user_order = None
         coffee_paginator = Paginator(coffies, 4)
         food_paginator = Paginator(foods, 4)
@@ -43,6 +52,7 @@ class MainPage(View):
             "current_order": user_order,
             "fd_page": page_obj_food,
             "cof_page": page_obj_cof,
+            "cof_vols": coffies_vols,
         }
         return render(request, template_name="main_page.html", context=ctx)
 

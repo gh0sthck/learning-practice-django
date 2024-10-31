@@ -11,7 +11,7 @@ from orders.views import (
 
 urlpatterns = [
     path(
-        "add_order_coffee/<int:coffee_id>",
+        "add_order_coffee/<str:coffee_name>",
         AddOrderCoffee.as_view(),
         name="add_order_coffee",
     ),

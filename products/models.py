@@ -5,15 +5,16 @@ from django.urls import reverse
 class Coffee(models.Model):
     name = models.CharField(max_length=90, verbose_name="Название", null=False)
     cost = models.PositiveIntegerField(verbose_name="Цена")
-    volume = models.DecimalField(
-        verbose_name="Объем", max_digits=3, decimal_places=2, default=0
+    volume = models.PositiveIntegerField(
+        verbose_name="Объем (мл)", default=0
     )
+    
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
-        return f"<Coffe: {self.name}>"
+        return f"<Coffee: {self.name}>"
 
     class Meta:
         ordering = ["name"]

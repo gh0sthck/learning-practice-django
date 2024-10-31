@@ -10,7 +10,7 @@
     {% else %}
         <h1 class="title">Ваш текущий заказ</h1>
         <p>
-            Кофе: {% if order.coffee %} {{ order.coffee.name }} - {{ order.coffee.cost }}₽ {% else %} Кофе не выбран {% endif %}
+            Кофе: {% if order.coffee %} {{ order.coffee.name }} {{ order.coffee.volume }}мл - {{ order.coffee.cost }}₽ {% else %} Кофе не выбран {% endif %}
             {% if order.coffee %}
             <p>Что добавить?</p>
             <form method="post">

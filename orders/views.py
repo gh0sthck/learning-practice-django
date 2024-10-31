@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.http import HttpRequest
 from django.shortcuts import redirect, render
 from django.views import View
@@ -47,10 +48,11 @@ class CurrentOrder(View):
 
 
 class AddOrderCoffee(View):
-    def post(self, request: HttpRequest, coffee_id: int):
+    def post(self, request: HttpRequest, coffee_name: str):
+        volume = int(self.request.POST["coffee_volume"])
         user = request.user
         order = get_order(user=user)
-        coffee = Coffee.objects.get(id=coffee_id)
+        coffee = Coffee.objects.filter(name=coffee_name, volume=volume)[0]
 
         if order:
             order.coffee = coffee
