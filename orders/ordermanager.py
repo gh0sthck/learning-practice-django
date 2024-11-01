@@ -23,12 +23,10 @@ class OrderManager:
     def add_coffee(self, coffee: Coffee):
         self.coffee.append(coffee.as_dict)
         self.session.modified = True
-        self.session.save()
 
     def add_food(self, food: Food):
         self.food.append(food.as_dict)
         self.session.modified = True
-        self.session.save()
 
     def remove_coffee(self, coffee: Coffee):
         if coffee.as_dict in self.coffee:
@@ -41,3 +39,15 @@ class OrderManager:
             self.food.remove(food.as_dict)
             self.session.modified = True
             return food
+   
+    def get_coffies_models(self) -> list[Coffee]:
+        r = []
+        for coffee_dt in self.coffee:
+            print(coffee_dt["id"])
+            r.append(Coffee.objects.get(id=coffee_dt["id"]))
+        for j in r:
+            print(j.volume)
+        return r 
+    
+    def get_total_price(self):
+        return sum(food["cost"] for food in self.food) + sum(coffee["cost"] for coffee in self.coffee)

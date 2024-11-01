@@ -9,28 +9,44 @@
         <h1 class="title">Вы не вошли в аккаунт</h1>
     {% else %}
         <h1 class="title">Ваш текущий заказ</h1>
-        {% for coffee in coffies %}
+        {% if not coffies %}
+            <p>Кофе не выбран.</p> 
+        {% endif %}
+        {% for coffee, form in coffies %}
             <p>
-                Кофе: {{ coffee.name }} {{ coffee.volume }}мл - {{ coffee.cost }}₽ - {{ coffee.id }} 
-                <form action={% url 'del_order_coffee' coffee.id %} method="post">{% csrf_token %}<input type="submit" value="Удалить из заказа"></form>
-                {% if order.coffee %}
+                Кофе: {{ coffee.name }} {{ coffee.volume }}мл - {{ coffee.cost }}₽ -
+                <form action={% url 'del_order_coffee' coffee.id %} method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Удалить из заказа">
+                </form>
                 <p>Что добавить?</p>
                 <form method="post">
                     {% csrf_token %}
-                    {{ mixin_form.as_p }}
+                    <input type="hidden" name="id" value={{ coffee.id }}>
+                    {{ form.as_p }}
                     <input type="submit" class="buy_button" value="Подтвердить" />
                 </form>
-                {% endif %}
             </p>
         {% endfor %} 
         <p>
-            Выпечка: {% if order.food %} {{ order.food.name }} - {{ order.food.cost }}₽ {% else %} Выпечка не выбрана {% endif %}
+            {% if not foods %}
+                <p>Выпечка не выбрана.</p>
+            {% endif %}
+            {% for food in foods %}
+                <p>
+                    Выпечка: {{ food.name }} - {{ food.cost }}₽
+                    -
+                    <form action={% url 'del_order_food' food.id %} method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Удалить из заказа">
+                    </form>
+                </p> 
+            {% endfor %}
         </p>
         
         <h2 class="sub_title">Подробнее</h2>
-        <p>Оплата заказа: {% if order.is_paid %} произведена {% else %} ждет оплаты {% endif %}</p>
-        <p>Готовность: {% if order.is_ready %} готов, можете забирать {% else %} готовится... {% endif %}</p>
-        <p>Использован бонус: {% if order.is_bonus_used %} да {% else %} нет {% endif %}</p>
+        {% comment %} <p>Оплата заказа: {% if order.is_paid %} произведена {% else %} ждет оплаты {% endif %}</p> {% endcomment %}
+        {% comment %} <p>Готовность: {% if order.is_ready %} готов, можете забирать {% else %} готовится... {% endif %}</p> {% endcomment %}
         <p>Сумма к оплате: {{ order.get_total_price }}₽</p>
     {% endif %}
 {% endblock main %}

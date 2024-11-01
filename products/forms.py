@@ -1,8 +1,8 @@
-from orders.models import Mixin
+from .models import Coffee
 from django import forms
 
 
 class AddMixinForm(forms.ModelForm):
     class Meta:
-        model = Mixin
+        model = Coffee
         fields = ["milk", "cinnamon", "syrup"]

@@ -5,9 +5,7 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView
 from django.core.paginator import Paginator
 
-from orders.models import Order
 from orders.ordermanager import OrderManager
-from orders.utils import get_order
 from products.models import Coffee, Food
 
 
@@ -36,16 +34,12 @@ class MainPage(View):
 
         coffies = [Coffee.objects.filter(name=cof)[0] for cof in coffies_vols]
 
-        user_order = None
         coffee_paginator = Paginator(coffies, 4)
         food_paginator = Paginator(foods, 4)
 
         page_number = request.GET.get("page")
         page_obj_cof = coffee_paginator.get_page(page_number)
         page_obj_food = food_paginator.get_page(page_number)
-
-        if request.user.is_authenticated:
-            user_order = get_order(user=request.user)
 
         order_manager = OrderManager(request)
         user_order = order_manager.user_order
