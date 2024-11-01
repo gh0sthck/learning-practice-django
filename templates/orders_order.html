@@ -9,17 +9,20 @@
         <h1 class="title">Вы не вошли в аккаунт</h1>
     {% else %}
         <h1 class="title">Ваш текущий заказ</h1>
-        <p>
-            Кофе: {% if order.coffee %} {{ order.coffee.name }} {{ order.coffee.volume }}мл - {{ order.coffee.cost }}₽ {% else %} Кофе не выбран {% endif %}
-            {% if order.coffee %}
-            <p>Что добавить?</p>
-            <form method="post">
-                {% csrf_token %}
-                {{ mixin_form.as_p }}
-                <input type="submit" class="buy_button" value="Подтвердить" />
-            </form>
-            {% endif %}
-        </p>
+        {% for coffee in coffies %}
+            <p>
+                Кофе: {{ coffee.name }} {{ coffee.volume }}мл - {{ coffee.cost }}₽ - {{ coffee.id }} 
+                <form action={% url 'del_order_coffee' coffee.id %} method="post">{% csrf_token %}<input type="submit" value="Удалить из заказа"></form>
+                {% if order.coffee %}
+                <p>Что добавить?</p>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ mixin_form.as_p }}
+                    <input type="submit" class="buy_button" value="Подтвердить" />
+                </form>
+                {% endif %}
+            </p>
+        {% endfor %} 
         <p>
             Выпечка: {% if order.food %} {{ order.food.name }} - {{ order.food.cost }}₽ {% else %} Выпечка не выбрана {% endif %}
         </p>

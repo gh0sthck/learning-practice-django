@@ -6,6 +6,7 @@ from django.views.generic.edit import CreateView
 from django.core.paginator import Paginator
 
 from orders.models import Order
+from orders.ordermanager import OrderManager
 from orders.utils import get_order
 from products.models import Coffee, Food
 
@@ -45,6 +46,9 @@ class MainPage(View):
 
         if request.user.is_authenticated:
             user_order = get_order(user=request.user)
+
+        order_manager = OrderManager(request)
+        user_order = order_manager.user_order
 
         ctx = {
             "foods": foods,

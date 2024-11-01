@@ -16,6 +16,10 @@ class Coffee(models.Model):
     def __repr__(self):
         return f"<Coffee: {self.name}>"
 
+    @property
+    def as_dict(self) -> dict:
+        return {"id": self.pk, "name": self.name, "cost": self.cost, "volume": self.volume}
+
     class Meta:
         ordering = ["name"]
         verbose_name = "Кофе"
@@ -31,6 +35,10 @@ class Food(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def as_dict(self) -> dict:
+        return {"id": self.pk, "name": self.name, "cost": self.cost}
 
     class Meta:
         ordering = ["name"]

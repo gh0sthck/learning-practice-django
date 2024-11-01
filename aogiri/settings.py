@@ -130,3 +130,4 @@ MEDIAFILES_DIRS = [BASE_DIR / MEDIA_URL]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.CoffeeUser"
+ORDER_SESSION_ID = "user_order"
