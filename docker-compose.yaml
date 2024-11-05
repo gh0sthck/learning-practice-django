@@ -1,0 +1,39 @@
+version: "4.2"
+services:
+  django:
+    container_name: django
+    build: .
+    tty: true
+    restart: always
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/practice/
+    environment:
+      - DB_NAME=practicedjango
+      - DB_USER=root
+      - DB_PASSWD=root
+      - DB_HOST=postgres
+    depends_on:
+      - postgres
+      # - redis
+
+  postgres:
+    container_name: postgres
+    image: postgres:17.0-alpine3.20
+    volumes:
+      - pgdata:/var/lib/postgresql/data/pgdata
+    ports:
+      - 5432:5342
+    environment:
+      - POSTGRES_DB=practicedjango
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - PGDATA=/var/lib/postgresql/data/pgdata
+
+  # redis:
+    # container_name: redis
+    # image: redis:8.0-M02-alpine
+
+volumes:
+  pgdata:
