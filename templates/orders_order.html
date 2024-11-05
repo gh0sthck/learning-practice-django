@@ -14,10 +14,10 @@
         {% endif %}
         {% for coffee, form in coffies %}
             <p>
-                Кофе: {{ coffee.name }} {{ coffee.volume }}мл - {{ coffee.cost }}₽ -
+                Кофе: {{ coffee.name }} {{ coffee.volume }}мл - {{ coffee.cost }}₽
                 <form action={% url 'del_order_coffee' coffee.id %} method="post">
                     {% csrf_token %}
-                    <input type="submit" value="Удалить из заказа">
+                    <input type="submit" class="del_button" value="Удалить из заказа">
                 </form>
                 <p>Что добавить?</p>
                 <form method="post">
@@ -34,11 +34,10 @@
             {% endif %}
             {% for food in foods %}
                 <p>
-                    Выпечка: {{ food.name }} - {{ food.cost }}₽
-                    -
+                    Выпечка: {{ food.name }} - {{ food.cost }}₽ 
                     <form action={% url 'del_order_food' food.id %} method="post">
                         {% csrf_token %}
-                        <input type="submit" value="Удалить из заказа">
+                        <input type="submit" class="del_button" value="Удалить из заказа">
                     </form>
                 </p> 
             {% endfor %}

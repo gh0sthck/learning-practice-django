@@ -59,7 +59,7 @@ class DelOrderCoffee(View):
         coffee = Coffee.objects.get(id=coffee_id)
         order_manager = OrderManager(request)
         order_manager.remove_coffee(coffee)
-        return redirect("main")
+        return redirect("current_order")
 
 
 class DelOrderFood(View):
@@ -67,4 +67,4 @@ class DelOrderFood(View):
         food = Food.objects.get(id=food_id)
         order_manager = OrderManager(request)
         order_manager.remove_food(food)
-        return redirect("main")
+        return redirect("current_order")
