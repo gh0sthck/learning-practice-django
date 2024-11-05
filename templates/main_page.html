@@ -13,6 +13,7 @@
   {% if coffies %}
     {% for coffee in cof_page %}
         <div class="product">
+            <p><img style="width: 250px; height: 250px" src="media/{{ coffee.image.name }}" alt="Coffee Image"></p>
             <h3>{{ coffee.name }}</h3>   
             <p>{{ coffee.cost }}₽</p>
             {% if user.is_authenticated %}
@@ -51,6 +52,7 @@
   {% if foods %}
   {% for food in fd_page %}
   <div class="product">
+    <p><img style="width: 250px; height: 250px" src="media/{{ food.image.name }}" alt="Coffee Image"></p>
     <h3>{{ food.name }}</h3>
     <p>{{ food.cost }}₽</p>
     {% if user.is_authenticated %}

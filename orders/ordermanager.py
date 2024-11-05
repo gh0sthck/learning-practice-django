@@ -1,5 +1,6 @@
 from django.http import HttpRequest
 from django.conf import settings
+from django.shortcuts import get_object_or_404
 
 from products.models import Coffee, Food
 
@@ -17,8 +18,8 @@ class OrderManager:
             self.session.modified = True
         
         self.user_order = user_order
-        self.coffee: list[Coffee] = self.user_order["order_coffee"]
-        self.food: list[Food] = self.user_order["order_food"]
+        self.coffee: list[dict] = self.user_order["order_coffee"]
+        self.food: list[dict] = self.user_order["order_food"]
 
     def add_coffee(self, coffee: Coffee):
         self.coffee.append(coffee.as_dict)
@@ -43,10 +44,7 @@ class OrderManager:
     def get_coffies_models(self) -> list[Coffee]:
         r = []
         for coffee_dt in self.coffee:
-            print(coffee_dt["id"])
             r.append(Coffee.objects.get(id=coffee_dt["id"]))
-        for j in r:
-            print(j.volume)
         return r 
     
     def get_total_price(self):

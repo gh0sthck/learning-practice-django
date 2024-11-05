@@ -57,13 +57,13 @@ class MainPage(View):
 
 class AddCoffee(CreateView):
     model = Coffee
-    fields = ["name", "cost", "volume"]
+    fields = ["name", "image", "cost", "volume"]
     template_name = "product_add.html"
     success_url = reverse_lazy("main")
 
 
 class AddFood(CreateView):
     model = Food
-    fields = ["name", "cost"]
+    fields = ["name", "image", "cost"]
     template_name = "product_add.html"
     success_url = reverse_lazy("main")

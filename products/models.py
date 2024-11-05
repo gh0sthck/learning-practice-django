@@ -1,9 +1,10 @@
+from typing import Iterable
 from django.db import models
-from django.urls import reverse
 
 
 class Coffee(models.Model):
     name = models.CharField(max_length=90, verbose_name="Название", null=False)
+    image = models.ImageField(upload_to="images/", verbose_name="Обложка") 
     cost = models.PositiveIntegerField(verbose_name="Цена")
     volume = models.PositiveIntegerField(verbose_name="Объем (мл)", default=0)
     milk = models.BooleanField(verbose_name="Молоко", default=False)
@@ -37,7 +38,7 @@ class Coffee(models.Model):
         self.cinnamon = cinnamon
         self.milk = milk
         self.syrup = syrup
-
+        
     class Meta:
         ordering = ["name"]
         verbose_name = "Кофе"
@@ -46,6 +47,7 @@ class Coffee(models.Model):
 
 class Food(models.Model):
     name = models.CharField(max_length=90, verbose_name="Название", null=False)
+    image = models.ImageField(upload_to="images/", verbose_name="Обложка")
     cost = models.PositiveIntegerField(verbose_name="Цена")
 
     def __repr__(self):
