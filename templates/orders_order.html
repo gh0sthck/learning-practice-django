@@ -42,10 +42,19 @@
                 </p> 
             {% endfor %}
         </p>
-        
+        {% if coffies|length or foods|length %}
+            <form method="post" action={% url 'confirm_order' %}>
+                {% csrf_token %}
+                {% for coffee, _ in coffies %}
+                    <input type="hidden" name="coffee" value={{coffee.id}}>
+                {% endfor %}
+                {% for food in foods %}
+                    <input type="hidden" name="food" value={{ food.id }}>
+                {% endfor %}
+                <input type="submit" class="buy_button" value="Подтвердить заказ">
+            </form>
+        {% endif %} 
         <h2 class="sub_title">Подробнее</h2>
-        {% comment %} <p>Оплата заказа: {% if order.is_paid %} произведена {% else %} ждет оплаты {% endif %}</p> {% endcomment %}
-        {% comment %} <p>Готовность: {% if order.is_ready %} готов, можете забирать {% else %} готовится... {% endif %}</p> {% endcomment %}
         <p>Сумма к оплате: {{ order.get_total_price }}₽</p>
     {% endif %}
 {% endblock main %}

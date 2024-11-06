@@ -14,9 +14,12 @@ services:
       - DB_USER=root
       - DB_PASSWD=root
       - DB_HOST=postgres
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=root
     depends_on:
       - postgres
-      # - redis
+      - redis
 
   postgres:
     container_name: postgres
@@ -31,9 +34,16 @@ services:
       - POSTGRES_PASSWORD=root
       - PGDATA=/var/lib/postgresql/data/pgdata
 
-  # redis:
-    # container_name: redis
-    # image: redis:8.0-M02-alpine
+  redis:
+    container_name: redis
+    image: redis:8.0-M02-alpine
+    ports:
+      - 6379:6379
+    environment:
+      - REDIS_PASSWORD=root
+      - REDIS_USER=root
+      - REDIS_USER_PASSWORD=root
+
 
 volumes:
   pgdata:

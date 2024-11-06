@@ -6,6 +6,7 @@ from orders.views import (
     CurrentOrder,
     DelOrderCoffee,
     DelOrderFood,
+    ConfirmOrder
 )
 
 
@@ -31,4 +32,9 @@ urlpatterns = [
         name="del_order_food",
     ),
     path("current", CurrentOrder.as_view(), name="current_order"),
+    path(
+        "confirm_order",
+        ConfirmOrder.as_view(),
+        name="confirm_order",
+    ),
 ]

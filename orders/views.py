@@ -4,6 +4,7 @@ from django.views import View
 
 from orders.ordermanager import OrderManager
 
+from orders.utils import add_order, get_order
 from products.models import Coffee, Food
 from products.forms import AddMixinForm
 
@@ -23,7 +24,7 @@ class CurrentOrder(View):
         return render(
             request,
             "orders_order.html",
-            {"order": order, "coffies": coffies, "foods": order_manager.food},
+            {"order": order, "coffies": tuple(coffies), "foods": order_manager.food},
         )
 
     def post(self, request: HttpRequest):
@@ -34,6 +35,21 @@ class CurrentOrder(View):
             coffee = Coffee.objects.get(id=coffee_id)
             coffee.set_mixin(cd.get("cinnamon"), cd.get("milk"), cd.get("syrup"))
             coffee.save()
+        return redirect("current_order")
+
+
+class ConfirmOrder(View):
+    def post(self, request: HttpRequest):
+        post_data = dict(request.POST.lists())
+        coffee_ids = list(map(int, post_data["coffee"]))
+        food_ids = list(map(int, post_data["food"]))
+
+        user_id = int(request.user.id)
+
+        order = {"coffies": coffee_ids, "food": food_ids, "ready": False, "paid": False}
+
+        add_order(user_id=user_id, order=order)
+
         return redirect("current_order")
 
 
@@ -68,3 +84,7 @@ class DelOrderFood(View):
         order_manager = OrderManager(request)
         order_manager.remove_food(food)
         return redirect("current_order")
+
+
+class BaristaQueue(View):
+    def get(self, request: HttpRequest): ...
