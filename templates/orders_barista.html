@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}
+Очередь заказов
+{% endblock title %}
+
+{% block main %}
+    {% if request.user.is_barista %}
+        <div class="orders">
+            {% for order in queue %}
+            {% if not order.ready %}
+            <div class="order">
+                <p>#{{ forloop.counter }} {{ order.username }}</p>
+                <div class="order__coffee_block order__section">
+                    {% for coffee in order.coffies %}
+                        <p>{{ coffee.name }}</p> 
+                    {% endfor %}
+                </div>
+                <div class="order__food_block order__section">
+                    {% for food in order.food %}
+                        <p>{{ food.name }}</p> 
+                    {% endfor %}
+                </div>
+                <div class="order__info_block order__section">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="ready_username" value="{{ order.username }}">
+                        {% if not order.ready %} <input type="submit" class="buy_button" value="Готово"> {% endif %}
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You're not barista</p>
+    {% endif %}
+{% endblock main %}

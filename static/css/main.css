@@ -117,3 +117,19 @@ form input {
     justify-content: center;
     margin: 15px 0 15px 0;
 }
+
+.orders {
+    display: flex;
+    width: 100%;
+}
+
+.order {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    background-color: #b3afaf;
+}
+
+.order__section {
+    background-color: #8f8b8b;
+}

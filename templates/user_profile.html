@@ -16,5 +16,9 @@
     <p>- <a href={% url 'add_coffee' %}>Добавить кофе</a></p>
     <p>- <a href={% url 'add_food' %}>Добавить выпечку</a></p>
     {% endif %}
+    {% if user.is_barista %}
+    <h3 class="sub_title">Панель управления бариста</h3>
+    <p>- <a href={% url 'barista_queue' %}>Очередь заказов</a></p>
+    {% endif %}
 </div>
 {% endblock main %}

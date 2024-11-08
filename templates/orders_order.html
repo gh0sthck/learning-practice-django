@@ -9,6 +9,7 @@
         <h1 class="title">Вы не вошли в аккаунт</h1>
     {% else %}
         <h1 class="title">Ваш текущий заказ</h1>
+        {% if not confirmed_order %}
         {% if not coffies %}
             <p>Кофе не выбран.</p> 
         {% endif %}
@@ -51,10 +52,36 @@
                 {% for food in foods %}
                     <input type="hidden" name="food" value={{ food.id }}>
                 {% endfor %}
+                <input type="hidden" name="total_price" value={{ order.get_total_price }}>
                 <input type="submit" class="buy_button" value="Подтвердить заказ">
             </form>
         {% endif %} 
+        {% else %}
+           {% for coffee in confirmed_order.coffies %}
+           <p>
+                <p>Кофе: {{ coffee.name }} {{ coffee.volume }}мл - {{ coffee.cost }}₽</p>
+                <p>{% if coffee.cinnamon %} - Корица{% endif %}</p>
+                <p>{% if coffee.milk %} - Молоко {% endif %}</p>
+                <p>{% if coffee.syrup %} - Сироп{% endif %}</p>
+            </p>
+           {% endfor %}
+           {% for food in confirm_order.food %}
+                <p>Еда: {{ food.name }} - {{ food.cost }}₽</p>
+           {% endfor %} 
+        {% endif %}
         <h2 class="sub_title">Подробнее</h2>
-        <p>Сумма к оплате: {{ order.get_total_price }}₽</p>
+        {% if confirmed_order %}
+            <p>Статус заказа: {% if confirmed_order.paid %} Оплачен {% else %} Ждет оплаты {% endif %}</p>
+            <p>Готовность: {% if confirmed_order.ready %} Готов, можете забирать! {% else %} Готовится... {% endif %}</p> 
+            <p>Сумма к оплате: {{ confirmed_order.total_price }}₽</p>
+        {% else %}
+            <p>Сумма к оплате: {{ order.get_total_price }}₽</p>
+        {% endif %}
+        {% if confirmed_order and confirmed_order.ready %}
+            <form action={% url "create_new_order" %} method="post">
+                {% csrf_token %}
+                <input type="submit" class="buy_button" value="Сделать новый заказ">
+            </form>
+        {% endif %}
     {% endif %}
 {% endblock main %}

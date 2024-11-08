@@ -2,6 +2,7 @@ from django.http import HttpRequest
 from django.shortcuts import redirect, render
 from django.views import View
 
+from aogiri.redis_conn import get_redis_connection
 from orders.ordermanager import OrderManager
 
 from orders.utils import add_order, get_order
@@ -21,10 +22,24 @@ class CurrentOrder(View):
         ]
         coffies = zip(order.coffee, forms)
 
+        confirmed_order = get_order(request.user.username)
+        if confirmed_order:
+            confirmed_order["coffies"] = [
+                Coffee.objects.get(id=int(cid)) for cid in confirmed_order["coffies"]
+            ]
+            confirmed_order["food"] = [
+                Food.objects.get(id=int(fid)) for fid in confirmed_order["food"]
+            ]
+
         return render(
             request,
             "orders_order.html",
-            {"order": order, "coffies": tuple(coffies), "foods": order_manager.food},
+            {
+                "order": order,
+                "coffies": tuple(coffies),
+                "foods": order_manager.food,
+                "confirmed_order": confirmed_order,
+            },
         )
 
     def post(self, request: HttpRequest):
@@ -41,13 +56,20 @@ class CurrentOrder(View):
 class ConfirmOrder(View):
     def post(self, request: HttpRequest):
         post_data = dict(request.POST.lists())
+        print(post_data)
+        total_price = int(post_data["total_price"][0])
         coffee_ids = list(map(int, post_data["coffee"]))
         food_ids = list(map(int, post_data["food"]))
-
         user_id = int(request.user.id)
 
-        order = {"coffies": coffee_ids, "food": food_ids, "ready": False, "paid": False}
-
+        order = {
+            "coffies": coffee_ids,
+            "food": food_ids,
+            "ready": False,
+            "paid": False,
+            "total_price": total_price,
+        }
+        request.session["user_order"] = {}
         add_order(user_id=user_id, order=order)
 
         return redirect("current_order")
@@ -87,4 +109,30 @@ class DelOrderFood(View):
 
 
 class BaristaQueue(View):
-    def get(self, request: HttpRequest): ...
+    def get(self, request: HttpRequest):
+        rc = get_redis_connection()
+
+        queue: list[dict] = [(get_order(u.decode())) for u in rc.keys()]
+        for order in queue:
+            order["coffies"] = [
+                Coffee.objects.get(id=int(cid)) for cid in order["coffies"]
+            ]
+            order["food"] = [Food.objects.get(id=int(fid)) for fid in order["food"]]
+
+        return render(
+            request, "orders_barista.html", {"queue": queue, "raw_queue": queue}
+        )
+
+    def post(self, request: HttpRequest):
+        order = get_order(request.POST["ready_username"])
+        order["ready"] = True
+        rc = get_redis_connection()
+        rc.set(name=request.POST["ready_username"], value=str(order))
+        return redirect("barista_queue")
+
+
+class CreateNewOrder(View):
+    def post(self, request: HttpRequest):
+        rc = get_redis_connection()
+        rc.delete(request.user.username) 
+        return redirect("main") 

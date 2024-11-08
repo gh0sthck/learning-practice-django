@@ -6,7 +6,9 @@ from orders.views import (
     CurrentOrder,
     DelOrderCoffee,
     DelOrderFood,
-    ConfirmOrder
+    ConfirmOrder,
+    BaristaQueue,
+    CreateNewOrder,
 )
 
 
@@ -37,4 +39,14 @@ urlpatterns = [
         ConfirmOrder.as_view(),
         name="confirm_order",
     ),
+    path(
+        "queue",
+        BaristaQueue.as_view(),
+        name="barista_queue",
+    ),
+    path(
+        "new_order",
+        CreateNewOrder.as_view(),
+        name="create_new_order"
+    )
 ]
