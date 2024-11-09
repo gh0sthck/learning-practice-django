@@ -109,7 +109,8 @@ form input {
     padding: 10px;
     border-radius: 10px;
     background-color: #f7f0f0;
-    margin: 5px;
+    margin: 9px 30px;
+    border: 1px solid red;
 }
 
 .pagination {
@@ -144,3 +145,10 @@ form input {
     margin-top: 15px;
     max-width: 40%;
 }
+
+.form_login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+

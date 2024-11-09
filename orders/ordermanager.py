@@ -17,7 +17,9 @@ class OrderManager:
     """
     def __init__(self, request: HttpRequest) -> None:
         self.session = request.session
-        self.user_bonus: Decimal = request.user.bonus
+        self.user_bonus = 0
+        if request.user.is_authenticated: 
+            self.user_bonus: Decimal = request.user.bonus
 
         user_order = self.session.get(settings.ORDER_SESSION_ID)
         if not user_order:

@@ -5,9 +5,9 @@
 {% endblock title %}
 
 {% block main %}
-<h1 class="title">Вход</h1>
+<h1 style="text-align: center;" class="title">Вход</h1>
 
-<form method="post">
+<form method="post" class="form_login">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" class="buy_button" value="Войти" />
