@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.http import HttpRequest
 from django.shortcuts import redirect, render
 from django.views import View
@@ -8,6 +9,7 @@ from orders.ordermanager import OrderManager
 from orders.utils import add_order, get_order
 from products.models import Coffee, Food
 from products.forms import AddMixinForm
+from users.models import CoffeeUser
 
 
 class CurrentOrder(View):
@@ -56,23 +58,37 @@ class CurrentOrder(View):
 class ConfirmOrder(View):
     def post(self, request: HttpRequest):
         post_data = dict(request.POST.lists())
-        print(post_data)
         total_price = int(post_data["total_price"][0])
-        coffee_ids = list(map(int, post_data["coffee"]))
-        food_ids = list(map(int, post_data["food"]))
-        user_id = int(request.user.id)
+        coffee_ids = []
+        food_ids = []
+        current_user_balance: float = float(request.user.balance)
 
-        order = {
-            "coffies": coffee_ids,
-            "food": food_ids,
-            "ready": False,
-            "paid": False,
-            "total_price": total_price,
-        }
-        request.session["user_order"] = {}
-        add_order(user_id=user_id, order=order)
+        if current_user_balance >= total_price:
+            u = CoffeeUser.objects.get(id=request.user.id)
+            u.pay_order(total_price)
+            u.save()
+            
+            if post_data.get("coffee"):
+                coffee_ids = list(map(int, post_data["coffee"]))
+            if post_data.get("food"):
+                food_ids = list(map(int, post_data["food"]))
 
-        return redirect("current_order")
+            user_id = int(request.user.id)
+
+            order = {
+                "coffies": coffee_ids,
+                "food": food_ids,
+                "ready": False,
+                "paid": False,
+                "total_price": total_price,
+            }
+            request.session["user_order"] = {}
+            add_order(user_id=user_id, order=order)
+
+            return redirect("current_order")
+        else:
+            messages.add_message(request, messages.ERROR, "Недостаточно средств на балансе")
+            return redirect("current_order")
 
 
 class AddOrderCoffee(View):
@@ -134,5 +150,5 @@ class BaristaQueue(View):
 class CreateNewOrder(View):
     def post(self, request: HttpRequest):
         rc = get_redis_connection()
-        rc.delete(request.user.username) 
-        return redirect("main") 
+        rc.delete(request.user.username)
+        return redirect("main")

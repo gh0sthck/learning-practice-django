@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.http import HttpRequest
 from django.conf import settings
 
@@ -16,6 +17,7 @@ class OrderManager:
     """
     def __init__(self, request: HttpRequest) -> None:
         self.session = request.session
+        self.user_bonus: Decimal = request.user.bonus
 
         user_order = self.session.get(settings.ORDER_SESSION_ID)
         if not user_order:
@@ -51,18 +53,16 @@ class OrderManager:
             self.session.modified = True
             return food
 
-    # def clear_order(self):  TODO: Create order clearing func - set empty lists not work.
-    #     self.user_order["coffee"] = []
-    #     self.user_order["food"] = []
-    #     self.session.modified = True
-
     def get_coffies_models(self) -> list[Coffee]:
         r = []
         for coffee_dt in self.coffee:
             r.append(Coffee.objects.get(id=coffee_dt["id"]))
         return r
 
-    def get_total_price(self):
-        return sum(food["cost"] for food in self.food) + sum(
+    def get_total_price(self) -> int:
+        total = sum(food["cost"] for food in self.food) + sum(
             coffee["cost"] for coffee in self.coffee
         )
+        if total > 180:
+            return int(total - self.user_bonus * total)
+        return total 

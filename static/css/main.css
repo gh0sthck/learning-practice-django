@@ -133,3 +133,14 @@ form input {
 .order__section {
     background-color: #8f8b8b;
 }
+
+.message {
+    background-color: rgba(197, 136, 136, 0.5);
+    border: 2px solid rgb(163, 59, 59);
+    color: rgb(163, 59, 59);
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: bold;
+    margin-top: 15px;
+    max-width: 40%;
+}

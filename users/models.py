@@ -1,3 +1,5 @@
+from decimal import Decimal
+from django.core.validators import MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -9,7 +11,11 @@ class CoffeeUser(AbstractUser):
     name = models.CharField(max_length=128, verbose_name="Имя", null=False)
     email = models.EmailField(verbose_name="Почта", null=False)
     bonus = models.DecimalField(
-        verbose_name="Баллы", default=0, max_digits=2, decimal_places=1
+        verbose_name="Баллы",
+        default=0,
+        max_digits=2,
+        decimal_places=1,
+        validators=[MaxValueValidator(limit_value=0.9)],
     )
     balance = models.DecimalField(
         verbose_name="Баланс", default=0, max_digits=10, decimal_places=2
@@ -21,6 +27,14 @@ class CoffeeUser(AbstractUser):
 
     def __repr__(self):
         return f"<CoffeeUser: {self.username}>"
+
+    def pay_order(self, total_price: int):
+        if total_price > 180:
+            self.balance -= total_price - self.bonus * total_price
+            self.bonus = 0
+        else:
+            self.balance -= total_price
+        self.bonus += Decimal(0.3)
 
     class Meta:
         ordering = ["name"]
