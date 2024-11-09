@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}
+Редактирование профиля 
+{% endblock title %}
+
+{% block main %}
+{% if request.user.pk == edited_user.pk or request.user.is_superuser %}
+    <h1 style="text-align: center;" class="title">Редактирование</h1>
+    <form method="post" class="form_login">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="buy_button" value="Завершить" />
+    </form>
+{% else %}
+    <h3 class="sub_title">У вас нет прав для посещения этой страницы</h3>
+{% endif %}
+{% endblock main %}

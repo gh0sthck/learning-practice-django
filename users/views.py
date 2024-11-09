@@ -1,6 +1,7 @@
 from django import forms
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.views.generic import UpdateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.contrib.auth import authenticate, login
@@ -33,3 +34,10 @@ class ProfileView(DetailView):
     template_name = "user_profile.html"
     context_object_name = "user"
     success_url = reverse_lazy("main")
+
+
+class ProfileUpdateView(UpdateView):
+    model = CoffeeUser
+    template_name = "user_edit.html"
+    context_object_name = "edited_user"
+    fields = ["username", "name", ]

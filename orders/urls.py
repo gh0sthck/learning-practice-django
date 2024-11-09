@@ -33,19 +33,19 @@ urlpatterns = [
         DelOrderFood.as_view(),
         name="del_order_food",
     ),
-    path("current", CurrentOrder.as_view(), name="current_order"),
+    path("current/", CurrentOrder.as_view(), name="current_order"),
     path(
         "confirm_order",
         ConfirmOrder.as_view(),
         name="confirm_order",
     ),
     path(
-        "queue",
+        "queue/",
         BaristaQueue.as_view(),
         name="barista_queue",
     ),
     path(
-        "new_order",
+        "new_order/",
         CreateNewOrder.as_view(),
         name="create_new_order"
     )

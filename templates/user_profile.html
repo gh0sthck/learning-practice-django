@@ -7,6 +7,7 @@
 {% block main %}
 <div class="profile">
     <h1 class="title">{{ user.username }}</h1>
+    <p><a href={% url "edit_profile" user.pk %}>Изменить</a></p>
     <p>Количество бонусов: {{ user.bonus }}</p>
     <p>
         Тип: {% if user.is_superuser %}Администратор {% elif user.is_barista %} Бариста {% else %} Клиент {% endif %}
