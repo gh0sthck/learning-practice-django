@@ -74,6 +74,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "orders.context_processors.order_manager"
             ],
         },
     },
@@ -172,8 +173,13 @@ EMAIL_MAIL_HTML = "user_email_confirm.html"
 EMAIL_MAIL_PLAIN = "email_confirm.txt"
 EMAIL_MAIL_PAGE_TEMPLATE = "user_email_success.html"
 
+EMAIL_PASSWORD_SUBJECT = "Восстановление пароля от Aogiri."
+EMAIL_PASSWORD_HTML = "user_password_confirm.html"
+EMAIL_PASSWORD_PLAIN = "password_confirm.txt"
+EMAIL_PASSWORD_PAGE_TEMPLATE = "user_password_success.html"
+EMAIL_PASSWORD_CHANGE_PAGE_TEMPLATE = "user_password_change.html"
 
-EMAIL_FROM_ADDRESS = EMAIL_HOST_USER 
+EMAIL_FROM_ADDRESS = EMAIL_HOST_USER
 EMAIL_PASSWORD_TOKEN_LIFE = 60 * 3
 EMAIL_MAIL_TOKEN_LIFE = EMAIL_PASSWORD_TOKEN_LIFE
  

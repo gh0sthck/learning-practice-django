@@ -15,6 +15,7 @@
     {% if not user.email_verified %}
     <p>Подтвердите аккаунт <a href={% url 'verify_email' %}>здесь</a></p>
     {% endif %}
+    <p><a href={% url "change_password" %}>Изменить пароль</a></p>
     {% if user.is_superuser %}
     <h3 class="sub_title">Панель управления</h3>
     <p>- <a href={% url 'add_coffee' %}>Добавить кофе</a></p>

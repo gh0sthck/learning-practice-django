@@ -1,7 +1,7 @@
 from django.urls import path, reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
 
-from users.views import ProfileUpdateView, ProfileView, RegisterView, verify_email
+from users.views import ProfileUpdateView, ProfileView, RegisterView, change_password, verify_email
 
 urlpatterns = [
     path(
@@ -16,4 +16,5 @@ urlpatterns = [
     path("profile/<int:pk>", ProfileView.as_view(), name="profile"),
     path("edit/<int:pk>", ProfileUpdateView.as_view(), name="edit_profile"),
     path("verify_email/", verify_email, name="verify_email"),
+    path("change_password/", change_password, name="change_password")
 ]

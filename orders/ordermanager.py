@@ -33,6 +33,9 @@ class OrderManager:
         self.coffee: list[dict] = self.user_order["order_coffee"]
         self.food: list[dict] = self.user_order["order_food"]
 
+    def get_order_length(self) -> int:
+        return len(self.coffee) + len(self.food)
+
     def add_coffee(self, coffee: Coffee) -> Coffee:
         self.coffee.append(coffee.as_dict)
         self.session.modified = True

@@ -10,7 +10,7 @@ from django.contrib.auth import login
 from users.forms import UserRegisterForm
 from users.models import CoffeeUser
 
-from django_email_verification import send_email
+from django_email_verification import send_email, send_password
 
 
 def verify_email(request: HttpRequest):
@@ -18,6 +18,11 @@ def verify_email(request: HttpRequest):
         send_email(request.user) 
         return render(request, "user_email_sent.html")
     return redirect("main")
+
+
+def change_password(request: HttpRequest):
+    send_password(request.user)
+    return render(request, "user_password_sent.html")
 
 
 class RegisterView(FormView):
