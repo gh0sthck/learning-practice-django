@@ -17,6 +17,8 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_PASSWORD=root
+      - EMAIL_HOST_USER=mymail@gmail.com
+      - EMAIL_HOST_PASSWORD=mykey
     depends_on:
       - postgres
       - redis

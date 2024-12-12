@@ -12,8 +12,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
+from typing import Any
 
 from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_email_verification",
+    
     "users",
     "products",
     "orders",
@@ -145,3 +149,33 @@ MEDIA_ROOT = BASE_DIR / MEDIA_URL
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.CoffeeUser"
 ORDER_SESSION_ID = "user_order"
+
+
+def email_verification_callback(user) -> None:
+    user.email_verified = True
+
+
+def password_change_callback(user, password: str | Any) -> None:
+    user.set_password(password)
+
+
+EMAIL_PAGE_DOMAIN = "http://localhost:8000/"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+EMAIL_MAIL_SUBJECT = "Подтверждение почты от Aogiri."
+EMAIL_MAIL_HTML = "user_email_confirm.html"
+EMAIL_MAIL_PLAIN = "email_confirm.txt"
+EMAIL_MAIL_PAGE_TEMPLATE = "user_email_success.html"
+
+
+EMAIL_FROM_ADDRESS = EMAIL_HOST_USER 
+EMAIL_PASSWORD_TOKEN_LIFE = 60 * 3
+EMAIL_MAIL_TOKEN_LIFE = EMAIL_PASSWORD_TOKEN_LIFE
+ 
+EMAIL_MAIL_CALLBACK = email_verification_callback
+EMAIL_PASSWORD_CALLBACK  = password_change_callback

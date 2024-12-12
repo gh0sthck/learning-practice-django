@@ -9,7 +9,7 @@ class CoffeeUser(AbstractUser):
         max_length=128, verbose_name="Имя пользователя", null=False, unique=True
     )
     name = models.CharField(max_length=128, verbose_name="Имя", null=False)
-    email = models.EmailField(verbose_name="Почта", null=False)
+    email = models.EmailField(verbose_name="Почта", null=False, unique=True)
     bonus = models.DecimalField(
         verbose_name="Баллы",
         default=0,
@@ -21,6 +21,7 @@ class CoffeeUser(AbstractUser):
         verbose_name="Баланс", default=0, max_digits=10, decimal_places=2
     )
     is_barista = models.BooleanField(verbose_name="Бариста", default=False)
+    email_verified = models.BooleanField(verbose_name="Подтвержден email", default=False)
 
     def __str__(self):
         return self.username

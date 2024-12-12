@@ -1,13 +1,23 @@
 from django import forms
-from django.shortcuts import redirect
+from django.http import HttpRequest
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import login
 
 from users.forms import UserRegisterForm
 from users.models import CoffeeUser
+
+from django_email_verification import send_email
+
+
+def verify_email(request: HttpRequest):
+    if not request.user.email_verified: 
+        send_email(request.user) 
+        return render(request, "user_email_sent.html")
+    return redirect("main")
 
 
 class RegisterView(FormView):
@@ -20,14 +30,8 @@ class RegisterView(FormView):
         saved_user = form.save(commit=False)
         saved_user.set_password(saved_user.password)
         saved_user.save()
-        user = authenticate(
-            username=saved_user.username,
-            password=saved_user.password,
-        )
-        if user:
-            login(self.request, user=user)
-        return redirect("main")
-
+        login(self.request, user=saved_user)
+        return redirect("verify_email")
 
 class ProfileView(DetailView):
     model = CoffeeUser

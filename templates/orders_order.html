@@ -11,7 +11,9 @@
         {% endfor %}
     {% endif %}
     {% if not user.is_authenticated %}
-        <h1 class="title">Вы не вошли в аккаунт</h1>
+        <h1 class="title">Вы не вошли в аккаунт.</h1>
+    {% elif not user.email_verified %}
+        <h1>Вы должны подтвердить аккаунт, чтобы сделать заказ.</h1>
     {% else %}
         <h1 class="title">Ваш текущий заказ</h1>
         {% if not confirmed_order %}
