@@ -23,8 +23,7 @@
                             <input class="del_button" type="submit" value="Выйти">
                         </form>
                     </li>
-                    <li><a href={% url 'current_order' %}>Заказ</a></li>
-                    {% comment %} TODO: order_manager.get_order_length - create simple red circle with order length {% endcomment %}
+                    <li><a href={% url 'current_order' %}>Заказ ({{ manager.get_order_length }})</a></li>
                     {% else %}
                     <li>
                         <form action={% url 'login' %} method="post">

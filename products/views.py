@@ -28,9 +28,9 @@ class MainPage(View):
         coffies_vols: dict[Coffee, list[int]] = {}
         for coffee in coffies:
             if coffee.name not in coffies_vols:
-               coffies_vols[coffee.name] = [coffee.volume]
+                coffies_vols[coffee.name] = {coffee.volume: coffee.cost}
             else:
-                coffies_vols[coffee.name].append(coffee.volume) 
+                coffies_vols[coffee.name].update({coffee.volume: coffee.cost})
 
         coffies = [Coffee.objects.filter(name=cof)[0] for cof in coffies_vols]
 

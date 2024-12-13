@@ -17,12 +17,11 @@ class CurrentOrder(View):
 
     def get(self, request: HttpRequest):
         order_manager = OrderManager(request=request)
-        order = order_manager
         forms = [
             self.mixin_form(coffee.mixins_as_dict)
             for coffee in order_manager.get_coffies_models()
         ]
-        coffies = zip(order.coffee, forms)
+        coffies = zip(order_manager.coffee, forms)
 
         confirmed_order = get_order(request.user.username)
         if confirmed_order:
@@ -37,7 +36,7 @@ class CurrentOrder(View):
             request,
             "orders_order.html",
             {
-                "order": order,
+                "order": order_manager,
                 "coffies": tuple(coffies),
                 "foods": order_manager.food,
                 "confirmed_order": confirmed_order,

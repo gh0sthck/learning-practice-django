@@ -15,14 +15,13 @@
         <div class="product">
             <p><img style="width: 250px; height: 250px" src="media/{{ coffee.image.name }}" alt="Coffee Image"></p>
             <h3>{{ coffee.name }}</h3>   
-            <p>{{ coffee.cost }}₽</p>
             {% if user.is_authenticated and user.email_verified %}
                 {% if coffee not in current_order.order_coffee or not current_order.order_coffee %}
                     <form action={% url 'add_order_coffee' coffee.name %} method="post">
                         {% with volumes=cof_vols|get_value_from_dict:coffee.name %}
                             <select name="coffee_volume" id="coffee-volumes">
                             {% for volume in volumes %}
-                                <option value={{ volume }}>{{ volume }}мл</option>
+                                <option value={{ volume }}>{{ volume }}мл - {{ volumes|get_value_from_dict:volume }}₽</option>
                             {% endfor %}
                             </select>
                         {% endwith %}
