@@ -127,7 +127,7 @@ class BaristaQueue(View):
     def get(self, request: HttpRequest):
         rc = get_redis_connection()
 
-        queue: list[dict] = [(get_order(u.decode())) for u in rc.keys()]
+        queue: list[dict] = [(get_order(u.decode())) for u in rc.keys() if not u.decode().startswith("_")]
         for order in queue:
             order["coffies"] = [
                 Coffee.objects.get(id=int(cid)) for cid in order["coffies"]

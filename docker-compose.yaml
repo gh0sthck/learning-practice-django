@@ -19,6 +19,8 @@ services:
       - REDIS_PASSWORD=root
       - EMAIL_HOST_USER=mymail@gmail.com
       - EMAIL_HOST_PASSWORD=mykey
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
       - postgres
       - redis
@@ -39,13 +41,30 @@ services:
   redis:
     container_name: redis
     image: redis:8.0-M02-alpine
+    restart: always
     ports:
       - 6379:6379
     environment:
       - REDIS_PASSWORD=root
       - REDIS_USER=root
       - REDIS_USER_PASSWORD=root
-
+    
+  celery:
+    container_name: celery
+    restart: always
+    build: .
+    command: celery -A aogiri worker -l INFO -E
+    volumes:
+      - .:/practice/
+    environment:
+      - DB_NAME=practicedjango
+      - DB_USER=root
+      - DB_PASSWD=root
+      - DB_HOST=postgres
+    depends_on:
+      - postgres
+      - redis
+      - django
 
 volumes:
   pgdata:

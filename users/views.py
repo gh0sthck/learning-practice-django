@@ -12,16 +12,18 @@ from users.models import CoffeeUser
 
 from django_email_verification import send_email, send_password
 
+from users.tasks import celery_send_email, celery_send_password
+
 
 def verify_email(request: HttpRequest):
     if not request.user.email_verified: 
-        send_email(request.user) 
+        celery_send_email.delay(request.user.pk)
         return render(request, "user_email_sent.html")
     return redirect("main")
 
 
 def change_password(request: HttpRequest):
-    send_password(request.user)
+    celery_send_password.delay(request.user.pk)
     return render(request, "user_password_sent.html")
 
 
