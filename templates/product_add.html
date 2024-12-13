@@ -6,8 +6,8 @@
 
 {% block main %}
 {% if user.is_superuser %}
-    <h1 class="title">Добавление нового продукта</h1>
-    <form method="post" enctype="multipart/form-data">
+    <h1 style="text-align: center;" class="title">Добавление нового продукта</h1>
+    <form class="form_login" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" class="buy_button" value="Добавить" />

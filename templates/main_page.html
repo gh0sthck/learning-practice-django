@@ -10,69 +10,75 @@
 <h2 class="sub_title">Кофе</h2>
 
 <div class="products">
-  {% if coffies %}
-    {% for coffee in cof_page %}
-        <div class="product">
-            <p><img style="width: 250px; height: 250px" src="media/{{ coffee.image.name }}" alt="Coffee Image"></p>
-            <h3>{{ coffee.name }}</h3>   
-            {% if user.is_authenticated and user.email_verified %}
-                {% if coffee not in current_order.order_coffee or not current_order.order_coffee %}
-                    <form action={% url 'add_order_coffee' coffee.name %} method="post">
-                        {% with volumes=cof_vols|get_value_from_dict:coffee.name %}
-                            <select name="coffee_volume" id="coffee-volumes">
-                            {% for volume in volumes %}
-                                <option value={{ volume }}>{{ volume }}мл - {{ volumes|get_value_from_dict:volume }}₽</option>
-                            {% endfor %}
-                            </select>
-                        {% endwith %}
-                        {% csrf_token %}
-                        <input class="buy_button" type="submit" value="Добавить в заказ" />
-                    </form>
-                {% else %}
-                    <form action={% url 'del_order_coffee' coffee.name %} method="post">
-                        {% csrf_token %}
-                        <input class="del_button" type="submit" value="Удалить из заказа" />
-                    </form>
-                {% endif %}
-            {% endif %}
-        </div>
-    {% endfor %}
-  
-  {% else %}
-  <h3>Кофе не найдено</h3>
-  {% endif %}
+    {% include "pagination_prev.html" with pag_page=cof_page %}
+    {% if coffies %}
+        {% for coffee in cof_page %}
+            <div class="product">
+                <div class="product__image">
+                    <img src="media/{{ coffee.image.name }}" alt="Coffee Image">
+                </div>
+                <div class="product__description"> 
+                    <h3>{{ coffee.name }}</h3>   
+                    {% if user.is_authenticated and user.email_verified %}
+                        <div class="product__buy">
+                            {% if coffee.as_dict in current_order.order_coffee %}
+                                <p style="font-size: 15px;">В корзине</p>
+                            {% endif %}
+                                <form action={% url 'add_order_coffee' coffee.name %} method="post">
+                                    {% with volumes=cof_vols|get_value_from_dict:coffee.name %}
+                                        <select name="coffee_volume" id="coffee-volumes">
+                                        {% for volume in volumes %}
+                                            <option value={{ volume }}>{{ volume }}мл - {{ volumes|get_value_from_dict:volume }}₽</option>
+                                        {% endfor %}
+                                        </select>
+                                    {% endwith %}
+                                    {% csrf_token %}
+                                    <input class="buy_button" type="submit" value="Добавить в заказ" />
+                                </form>
+                        </div> 
+                    {% endif %}
+                </div>
+                
+            </div>
+        {% endfor %}
+    {% else %}
+        <h3>Кофе не найдено</h3>
+    {% endif %}
+    {% include "pagination_next.html" with pag_page=cof_page %}
 </div>
-
-{% include "pagination.html" with pag_page=cof_page %}
 
 <h2 class="sub_title">Выпечка</h2>
-<div class="products">
 
-  {% if foods %}
-  {% for food in fd_page %}
-  <div class="product">
-    <p><img style="width: 250px; height: 250px" src="media/{{ food.image.name }}" alt="Coffee Image"></p>
-    <h3>{{ food.name }}</h3>
-    <p>{{ food.cost }}₽</p>
-    {% if user.is_authenticated and user.email_verified %}
-        {% if current_order.food != food %}
-            <form action={% url 'add_order_food' food.pk %} method="post">
-            {% csrf_token %}
-            <input class="buy_button" type="submit" value="Добавить в заказ" />
-            </form>
-        {% else %}
-            <form action={% url 'del_order_food' food.pk %} method="post">
-            {% csrf_token %}
-            <input class="del_button" type="submit" value="Удалить из заказа" />
-            </form>
-        {% endif %}
+<div class="products">
+    {% include "pagination_prev.html" with pag_page=fd_page %}
+    {% if foods %}
+        {% for food in fd_page %}
+            <div class="product">
+                <div class="product__image">
+                    <img src="media/{{ food.image.name }}" alt="Food Image">
+                </div>
+                <div class="product__description">
+                    <h3>{{ food.name }}</h3>
+                    {% if food.as_dict in current_order.order_food %}
+                        <p style="font-size:15px;">В корзине</p>
+                    {% endif %}
+                    <p>{{ food.cost }}₽</p>
+                    {% if user.is_authenticated and user.email_verified %}
+                        <div class="product__buy"> 
+                            <form action={% url 'add_order_food' food.pk %} method="post">
+                                {% csrf_token %}
+                                <input class="buy_button" type="submit" value="Добавить в заказ" />
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+                
+            </div>
+        {% endfor %}
+    {% else %}
+        <h3>Выпечки не найдно</h3>
     {% endif %}
-  </div>
-  {% endfor %}
-  {% else %}
-  <h3>Выпечки не найдно</h3>
-  {% endif %}
+    {% include "pagination_next.html" with pag_page=fd_page %}
 </div>
 
-{% include "pagination.html" with pag_page=fd_page %}
 {% endblock %}

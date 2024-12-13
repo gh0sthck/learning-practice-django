@@ -66,7 +66,7 @@ class ConfirmOrder(View):
             u = CoffeeUser.objects.get(id=request.user.id)
             u.pay_order(total_price)
             u.save()
-            
+
             if post_data.get("coffee"):
                 coffee_ids = list(map(int, post_data["coffee"]))
             if post_data.get("food"):
@@ -78,7 +78,7 @@ class ConfirmOrder(View):
                 "coffies": coffee_ids,
                 "food": food_ids,
                 "ready": False,
-                "paid": False,
+                "paid": True,
                 "total_price": total_price,
             }
             request.session["user_order"] = {}
@@ -86,7 +86,9 @@ class ConfirmOrder(View):
 
             return redirect("current_order")
         else:
-            messages.add_message(request, messages.ERROR, "Недостаточно средств на балансе")
+            messages.add_message(
+                request, messages.ERROR, "Недостаточно средств на балансе"
+            )
             return redirect("current_order")
 
 
@@ -127,7 +129,11 @@ class BaristaQueue(View):
     def get(self, request: HttpRequest):
         rc = get_redis_connection()
 
-        queue: list[dict] = [(get_order(u.decode())) for u in rc.keys() if not u.decode().startswith("_")]
+        queue: list[dict] = [
+            (get_order(u.decode()))
+            for u in rc.keys()
+            if not u.decode().startswith("_") and not u.decode().startswith("celery")
+        ]
         for order in queue:
             order["coffies"] = [
                 Coffee.objects.get(id=int(cid)) for cid in order["coffies"]

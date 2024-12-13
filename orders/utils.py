@@ -17,7 +17,6 @@ def get_order(username: Optional[str] = None) -> Optional[dict]:
     if username: 
         rc = get_redis_connection()
         order: Optional[bytes] = rc.get(name=username)
-        print(order)
         if order:
             order_decoded = order.decode("utf-8")
             order: dict = ast.literal_eval(order_decoded)

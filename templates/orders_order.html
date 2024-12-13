@@ -17,26 +17,25 @@
     {% else %}
         <h1 class="title">Ваш текущий заказ</h1>
         {% if not confirmed_order %}
-        {% if not coffies %}
-            <p>Кофе не выбран.</p> 
-        {% endif %}
-        {% for coffee, form in coffies %}
-            <p>
-                Кофе: {{ coffee.name }} {{ coffee.volume }}мл - {{ coffee.cost }}₽
-                <form action={% url 'del_order_coffee' coffee.id %} method="post">
-                    {% csrf_token %}
-                    <input type="submit" class="del_button" value="Удалить из заказа">
-                </form>
-                <p>Что добавить?</p>
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="id" value={{ coffee.id }}>
-                    {{ form.as_p }}
-                    <input type="submit" class="buy_button" value="Подтвердить" />
-                </form>
-            </p>
-        {% endfor %} 
-        <p>
+            {% if not coffies %}
+                <p>Кофе не выбран.</p> 
+            {% endif %}
+            {% for coffee, form in coffies %}
+                <p>
+                    Кофе: {{ coffee.name }} {{ coffee.volume }}мл - {{ coffee.cost }}₽
+                    <form action={% url 'del_order_coffee' coffee.id %} method="post">
+                        {% csrf_token %}
+                        <input type="submit" class="del_button" value="Удалить из заказа">
+                    </form>
+                    <p>Что добавить?</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value={{ coffee.id }}>
+                        {{ form.as_p }}
+                        <input type="submit" class="buy_button" value="Подтвердить" />
+                    </form>
+                </p>
+            {% endfor %} 
             {% if not foods %}
                 <p>Выпечка не выбрана.</p>
             {% endif %}
@@ -49,20 +48,19 @@
                     </form>
                 </p> 
             {% endfor %}
-        </p>
-        {% if coffies|length or foods|length %}
-            <form method="post" action={% url 'confirm_order' %}>
-                {% csrf_token %}
-                {% for coffee, _ in coffies %}
-                    <input type="hidden" name="coffee" value={{coffee.id}}>
-                {% endfor %}
-                {% for food in foods %}
-                    <input type="hidden" name="food" value={{ food.id }}>
-                {% endfor %}
-                <input type="hidden" name="total_price" value={{ order.get_total_price }}>
-                <input type="submit" class="buy_button" value="Подтвердить заказ">
-            </form>
-        {% endif %} 
+            {% if coffies|length or foods|length %}
+                <form method="post" action={% url 'confirm_order' %}>
+                    {% csrf_token %}
+                    {% for coffee, _ in coffies %}
+                        <input type="hidden" name="coffee" value={{coffee.id}}>
+                    {% endfor %}
+                    {% for food in foods %}
+                        <input type="hidden" name="food" value={{ food.id }}>
+                    {% endfor %}
+                    <input type="hidden" name="total_price" value={{ order.get_total_price }}>
+                    <input type="submit" class="buy_button" value="Подтвердить заказ">
+                </form>
+            {% endif %} 
         {% else %}
            {% for coffee in confirmed_order.coffies %}
            <p>
@@ -72,23 +70,26 @@
                 <p>{% if coffee.syrup %} - Сироп{% endif %}</p>
             </p>
            {% endfor %}
-           {% for food in confirm_order.food %}
+           {% for food in confirmed_order.food %}
                 <p>Еда: {{ food.name }} - {{ food.cost }}₽</p>
            {% endfor %} 
         {% endif %}
+
         <h2 class="sub_title">Подробнее</h2>
         {% if confirmed_order %}
             <p>Статус заказа: {% if confirmed_order.paid %} Оплачен {% else %} Ждет оплаты {% endif %}</p>
             <p>Готовность: {% if confirmed_order.ready %} Готов, можете забирать! {% else %} Готовится... {% endif %}</p> 
-            <p>Сумма к оплате: {{ confirmed_order.total_price }}₽</p>
+            <p>Стоимость: {{ confirmed_order.total_price }}₽</p>
         {% else %}
             <p>Сумма к оплате: {{ order.get_total_price }}₽</p>
         {% endif %}
+        
         {% if confirmed_order and confirmed_order.ready %}
             <form action={% url "create_new_order" %} method="post">
                 {% csrf_token %}
                 <input type="submit" class="buy_button" value="Сделать новый заказ">
             </form>
         {% endif %}
+
     {% endif %}
 {% endblock main %}

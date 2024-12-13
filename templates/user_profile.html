@@ -6,12 +6,13 @@
 
 {% block main %}
 <div class="profile">
-    <h1 class="title">{{ user.username }}</h1>
+    <h1 class="title">{{ user.username }}
+    <span style="font-size: 15px;">
+        [{% if user.is_superuser %}Администратор{% elif user.is_barista %}Бариста{% else %}Клиент{% endif %}]
+    </span>
+    </h1> 
     <p><a href={% url "edit_profile" user.pk %}>Изменить</a></p>
     <p>Количество бонусов: {{ user.bonus }}</p>
-    <p>
-        Тип: {% if user.is_superuser %}Администратор {% elif user.is_barista %} Бариста {% else %} Клиент {% endif %}
-    </p>
     {% if not user.email_verified %}
     <p>Подтвердите аккаунт <a href={% url 'verify_email' %}>здесь</a></p>
     {% endif %}

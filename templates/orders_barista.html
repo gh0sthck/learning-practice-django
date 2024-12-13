@@ -13,19 +13,22 @@
                 <p>#{{ forloop.counter }} {{ order.username }}</p>
                 <div class="order__coffee_block order__section">
                     {% for coffee in order.coffies %}
-                        <p>{{ coffee.name }}</p> 
+                        <p style="font-weight: 500;">{{ coffee.name }} ({{ coffee.volume }}мл.)</p>
+                        <p>{% if coffee.milk %} - Молоко {% endif %}</p>
+                        <p>{% if coffee.cinnamon %} - Корица {% endif %}</p>
+                        <p>{% if coffee.syrup %} - Сироп {% endif %}</p>
                     {% endfor %}
                 </div>
                 <div class="order__food_block order__section">
                     {% for food in order.food %}
-                        <p>{{ food.name }}</p> 
+                        <p style="font-weight: 500;">{{ food.name }}</p> 
                     {% endfor %}
                 </div>
                 <div class="order__info_block order__section">
                     <form method="post">
                         {% csrf_token %}
                         <input type="hidden" name="ready_username" value="{{ order.username }}">
-                        {% if not order.ready %} <input type="submit" class="buy_button" value="Готово"> {% endif %}
+                        <input type="submit" class="buy_button" value="Готово">
                     </form>
                 </div>
             </div>

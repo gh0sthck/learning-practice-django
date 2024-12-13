@@ -34,8 +34,8 @@ class MainPage(View):
 
         coffies = [Coffee.objects.filter(name=cof)[0] for cof in coffies_vols]
 
-        coffee_paginator = Paginator(coffies, 4)
-        food_paginator = Paginator(foods, 4)
+        coffee_paginator = Paginator(coffies, 3)
+        food_paginator = Paginator(foods, 3)
 
         page_number = request.GET.get("page")
         page_obj_cof = coffee_paginator.get_page(page_number)
